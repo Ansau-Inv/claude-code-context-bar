@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Claude Code statusline — context usage bar
+ * Claude Code statusline — context usage bar  v0.1.0
  *
  * 三行输出：满宽色带 / 模型与 ctx / 分段明细（可选）。
  * 数据源是 Claude Code 从 stdin 传入的 JSON，固定开销部分从 transcript 读取。
@@ -10,11 +10,14 @@
  *   --no-breakdown    不输出第三行分段明细
  *   --lang zh|en      明细标签语言（默认 zh）
  *   --no-color        等价于 NO_COLOR=1
+ *   --version         打印版本号后退出
  */
 import { readFileSync, writeFileSync, statSync, appendFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
+
+const VERSION = '0.1.0';
 
 const argv = process.argv.slice(2);
 const flagValue = (name, fallback) => {
@@ -23,6 +26,11 @@ const flagValue = (name, fallback) => {
   const v = argv[i + 1];
   return v === undefined || v.startsWith('--') ? fallback : v;
 };
+
+if (argv.includes('--version') || argv.includes('-v')) {
+  process.stdout.write('claude-code-context-bar ' + VERSION + '\n');
+  process.exit(0);
+}
 
 const MARGIN_DEFAULT = 4;
 // 留白不能为负，否则条会比可用宽度还长

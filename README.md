@@ -1,5 +1,7 @@
 # claude-code-context-bar
 
+**v0.1.0**
+
 给 Claude Code 的 statusline 加一条上下文用量条 —— 满宽色带 + 按类别拆分的用量明细。
 
 ![预览](docs/preview.svg)
@@ -61,6 +63,7 @@ node install.mjs --uninstall
 | `--no-breakdown` | 不输出第三行分段明细 |
 | `--lang en` | 明细标签用英文（默认 `zh`） |
 | `--no-color` | 等价于环境变量 `NO_COLOR=1` |
+| `--version` | 打印版本号 |
 
 ### 让宽度实时跟随窗口
 

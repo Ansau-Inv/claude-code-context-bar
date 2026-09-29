@@ -1,6 +1,6 @@
 {
   "name": "claude-code-context-bar",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Context usage bar for Claude Code's statusline — full-width segmented bar plus per-category token breakdown",
   "type": "module",
   "bin": {
