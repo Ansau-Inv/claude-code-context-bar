@@ -1,11 +1,60 @@
 // 从脚本的真实输出生成 README 用的 SVG，保证图与实现永不脱节
+//
+//   node docs/make-preview.cjs [脚本路径] [transcript.jsonl] [输出路径]
+//
+// transcript 是必需的：固定开销（系统提示词、工具定义等）要从里面读。
+// 任一参数缺省时用下面的默认值。
 const { execFileSync } = require('child_process');
 const fs = require('fs');
+const path = require('path');
+const os = require('os');
 const NODE = process.execPath;
 
-const MJS = process.argv[2];
-const TRANSCRIPT = process.argv[3];
-const OUT = process.argv[4];
+const HERE = __dirname;
+
+// 默认 transcript：取 ~/.claude/projects 下最近修改的一个会话文件。
+// 找不到就没法生成——固定开销必须从真实会话里读。
+function findTranscript() {
+  const root = path.join(os.homedir(), '.claude', 'projects');
+  let best = null;
+  try {
+    for (const proj of fs.readdirSync(root)) {
+      const dir = path.join(root, proj);
+      let st;
+      try {
+        st = fs.statSync(dir);
+      } catch {
+        continue;
+      }
+      if (!st.isDirectory()) continue;
+      for (const f of fs.readdirSync(dir)) {
+        if (!f.endsWith('.jsonl')) continue;
+        const p = path.join(dir, f);
+        let fst;
+        try {
+          fst = fs.statSync(p);
+        } catch {
+          continue;
+        }
+        if (!best || fst.mtimeMs > best.mtimeMs) best = { p, mtimeMs: fst.mtimeMs };
+      }
+    }
+  } catch {
+    return null;
+  }
+  return best ? best.p : null;
+}
+
+const MJS = process.argv[2] || path.join(HERE, '..', 'context-bar.mjs');
+const TRANSCRIPT = process.argv[3] || findTranscript();
+const OUT = process.argv[4] || path.join(HERE, 'preview.svg');
+
+if (!TRANSCRIPT || !fs.existsSync(TRANSCRIPT)) {
+  console.error('找不到 transcript 文件。用法：');
+  console.error('  node docs/make-preview.cjs [脚本路径] <transcript.jsonl> [输出路径]');
+  console.error('transcript 在 ~/.claude/projects/<项目>/<会话>.jsonl');
+  process.exit(1);
+}
 
 const CW = { used: 262000, size: 1000000 };
 const COLS = 100;

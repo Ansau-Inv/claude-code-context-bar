@@ -7,13 +7,15 @@
 
 ![预览](docs/preview.svg)
 
-- **三行输出**：ctx用量+色带（各段按 token 占比分列）、模型与项目名、分段明细
+- **第一行**：色带 + 右侧压着用量读数（`262k/1.0M 26.2%`，颜色随占用率转黄转红）
+- **第二行**：模型名 · 目录名，缓存命中率（网关有上报时才显示）
+- **第三行**：分段明细，每项带一个与色带同色的方块和该段的 token 数
 - **数据来自 Claude Code 本身**：`context_window` 是官方字段，不是估算
 - **固定开销精确读取**：从 transcript 的 `prompt_snapshot` 里读系统提示词和工具定义原文
 - **零依赖**：只用 Node 内置模块
 - **卸载可逐字节还原**：用字符串增删而非 JSON 重序列化，不打乱你的键顺序和缩进
 
-色带的分段（由深到浅）：**系统提示词 → 内置工具 → MCP 工具 → 技能 → 记忆 → 对话**，最后是自由段，右侧压着用量读数。第三行的彩色小方块与色带一一对应。
+色带的分段（由深到浅）：**系统提示词 → 内置工具 → MCP 工具 → 技能 → 记忆 → 对话**，剩下的留白是自由段，用量读数就压在它的右端。第三行的彩色小方块与色带逐段对应。
 
 ## 安装
 
@@ -118,13 +120,19 @@ Claude Code 传进来的只有总量（`context_window.total_input_tokens`），
 
 ## 开发
 
-`docs/preview.svg` 由脚本的真实输出生成，不是手绘的，所以图和实现不会脱节：
+`docs/preview.svg` 由脚本的真实输出生成，不是手绘的，所以图和实现不会脱节。改动渲染逻辑后重新生成一次，图就跟着更新：
 
 ```bash
-node docs/make-preview.cjs ./context-bar.mjs <transcript.jsonl> docs/preview.svg
+npm run make-preview-image
 ```
 
-传一个真实的 transcript 路径即可（`~/.claude/projects/<项目>/<会话>.jsonl`）。改动渲染逻辑后重新生成一次，图就跟着更新。
+它默认用 `context-bar.mjs` 和 `~/.claude/projects` 下最近修改的那个会话文件，输出到 `docs/preview.svg`。也可以显式指定：
+
+```bash
+node docs/make-preview.cjs <脚本路径> <transcript.jsonl> <输出路径>
+```
+
+（固定开销要从 transcript 里读，所以需要一个真实会话文件。）
 
 脚本本身没有依赖，也不需要构建。手动预览：
 
@@ -132,7 +140,7 @@ node docs/make-preview.cjs ./context-bar.mjs <transcript.jsonl> docs/preview.svg
 node context-bar.mjs
 ```
 
-（stdin 是 TTY 时用内置示例数据渲染，不会阻塞等输入。）
+stdin 是 TTY 时用内置示例数据渲染，不会阻塞等输入；`--version` 打印版本号。
 
 ## 许可
 
