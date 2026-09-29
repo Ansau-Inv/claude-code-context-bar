@@ -478,16 +478,13 @@ function render(d) {
   if (cacheText !== null) segs.push(`${LABELS.cache} ${cacheText}`);
   if (dir) segs.push(dir);
 
-  const right2 = `ctx ${pct.toFixed(0)}% (${fmtTokens(used)}/${fmtTokens(size)})`;
-  const room = barWidth - width(right2) - 1;
+  // 第二行只放左对齐的模型/缓存/目录。用量读数已经在第一行右侧，
+  // 这里再显示一遍 ctx 是重复信息，所以不再右对齐任何内容。
   let left2 = segs.join(' · ');
-  // 放不下就先丢目录，再不行才截断模型名
-  if (width(left2) > room && segs.length > 2) left2 = [segs[0], segs[segs.length - 1]].join(' · ');
-  left2 = truncate(left2, room);
-
-  const gap = barWidth - width(left2) - width(right2);
-  if (gap >= 1) lines.push(left2 + ' '.repeat(gap) + right2);
-  else if (left2) lines.push(left2);
+  // 放不下就先丢目录，再不行才截断
+  if (width(left2) > barWidth && segs.length > 2) left2 = [segs[0], segs[segs.length - 1]].join(' · ');
+  left2 = truncate(left2, barWidth);
+  if (left2) lines.push(left2);
 
   // 第三行：分段明细。放不下时 renderBreakdown 返回空串，此时不要 push 空行。
   if (!BREAKDOWN_OFF && entries) {
