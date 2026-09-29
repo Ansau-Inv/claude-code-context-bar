@@ -1,16 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="783" height="86" viewBox="0 0 783 86" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="13">
-  <style>
-    /* GitHub 按主题切换：浅色用近白底，深色用近黑底 */
-    .bg { fill: #ffffff; }
-    .fg { fill: #1f2328; }
-    .fg2 { fill: #59636e; }
-    @media (prefers-color-scheme: dark) {
-      .bg { fill: #2e3440; }
-      .fg { fill: #d8dee9; }
-      .fg2 { fill: #a8b2c4; }
-    }
-  </style>
-  <rect width="100%" height="100%" class="bg"/>
-  <text x="16" y="55.5" class="fg" xml:space="preserve">Sonnet 5 · project                                                           ctx 26% (262k/1.0M)</text>
-  <text x="16.0" y="73.1" class="fg2" xml:space="preserve">系统 9.1k ·   工具 78k ·   MCP 92k ·   技能 2.1k ·   记忆 620 ·   对话 81k ·   自由 738k</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="783" height="86" viewBox="0 0 783 86" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">
+  <rect x="16.0" y="16" width="15.7" height="20" fill="#1b2a5e"/>
+  <rect x="31.7" y="16" width="47.0" height="20" fill="#2b4c8c"/>
+  <rect x="78.6" y="16" width="62.6" height="20" fill="#4d6bfe"/>
+  <rect x="141.2" y="16" width="7.8" height="20" fill="#7a9bff"/>
+  <rect x="149.0" y="16" width="7.8" height="20" fill="#a8c0ff"/>
+  <rect x="156.9" y="16" width="54.8" height="20" fill="#c9d6f0"/>
+  <rect x="211.6" y="16" width="555.6" height="20" fill="#2e3440"/>
+  <text x="647.9" y="30.4" fill="#8d95a6" xml:space="preserve">262k/1.0M 26.2%</text>
+  <text x="16" y="55.5" fill="#6e7781" xml:space="preserve">Sonnet 5 · project                                                           ctx 26% (262k/1.0M)</text>
+  <rect x="16.0" y="62.0" width="7.8" height="13" fill="#1b2a5e"/>
+  <text x="31.7" y="73.1" fill="#6e7781" xml:space="preserve">系统 9.1k</text>
+  <text x="109.9" y="73.1" fill="#6e7781" xml:space="preserve">· </text>
+  <rect x="133.4" y="62.0" width="7.8" height="13" fill="#2b4c8c"/>
+  <text x="149.0" y="73.1" fill="#6e7781" xml:space="preserve">工具 78k</text>
+  <text x="219.5" y="73.1" fill="#6e7781" xml:space="preserve">· </text>
+  <rect x="243.0" y="62.0" width="7.8" height="13" fill="#4d6bfe"/>
+  <text x="258.6" y="73.1" fill="#6e7781" xml:space="preserve">MCP 92k</text>
+  <text x="321.2" y="73.1" fill="#6e7781" xml:space="preserve">· </text>
+  <rect x="344.7" y="62.0" width="7.8" height="13" fill="#7a9bff"/>
+  <text x="360.3" y="73.1" fill="#6e7781" xml:space="preserve">技能 2.1k</text>
+  <text x="438.6" y="73.1" fill="#6e7781" xml:space="preserve">· </text>
+  <rect x="462.1" y="62.0" width="7.8" height="13" fill="#a8c0ff"/>
+  <text x="477.7" y="73.1" fill="#6e7781" xml:space="preserve">记忆 620</text>
+  <text x="548.2" y="73.1" fill="#6e7781" xml:space="preserve">· </text>
+  <rect x="571.6" y="62.0" width="7.8" height="13" fill="#c9d6f0"/>
+  <text x="587.3" y="73.1" fill="#6e7781" xml:space="preserve">对话 81k</text>
+  <text x="657.7" y="73.1" fill="#6e7781" xml:space="preserve">· </text>
+  <rect x="681.2" y="62.0" width="7.8" height="13" fill="#4a5568"/>
+  <text x="696.9" y="73.1" fill="#6e7781" xml:space="preserve">自由 738k</text>
 </svg>
