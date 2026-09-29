@@ -1,0 +1,40 @@
+{
+  "name": "claude-code-context-bar",
+  "version": "1.0.0",
+  "description": "Context usage bar for Claude Code's statusline — full-width segmented bar plus per-category token breakdown",
+  "type": "module",
+  "bin": {
+    "claude-code-context-bar": "install.mjs"
+  },
+  "files": [
+    "context-bar.mjs",
+    "install.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "install-statusline": "node install.mjs",
+    "uninstall-statusline": "node install.mjs --uninstall",
+    "status": "node install.mjs --status",
+    "preview": "node context-bar.mjs"
+  },
+  "keywords": [
+    "claude-code",
+    "statusline",
+    "context-window",
+    "tokens",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ansau-Inv/claude-code-context-bar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ansau-Inv/claude-code-context-bar/issues"
+  },
+  "homepage": "https://github.com/Ansau-Inv/claude-code-context-bar#readme",
+  "license": "MIT"
+}

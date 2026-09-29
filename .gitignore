@@ -1,0 +1,7 @@
+node_modules/
+*.log
+
+# 运行时产物：缓存写在系统临时目录，这里只是防止误提交
+cache.json
+diag.json
+settings.json.bak
