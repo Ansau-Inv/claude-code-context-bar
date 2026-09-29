@@ -146,6 +146,25 @@ function allocate(values, total) {
   return alloc;
 }
 
+// 在固定总列数内按比例分配，但每个非零段保底 1 列。
+// 保底列从「按比例该拿的列」里扣，总额严格等于 total，
+// 因此不会溢出到自由段去——色块边界仍与读数一致。
+function allocateWithFloor(values, total) {
+  const n = values.length;
+  if (total <= 0) return values.map(() => 0);
+  const positive = values.map((v, i) => (v > 0 ? i : -1)).filter((i) => i >= 0);
+  if (positive.length === 0) return values.map(() => 0);
+  // 列数比段数还少时，优先给占比大的
+  if (positive.length > total) {
+    const order = [...positive].sort((a, b) => values[b] - values[a]);
+    const out = values.map(() => 0);
+    for (let k = 0; k < total; k++) out[order[k]] = 1;
+    return out;
+  }
+  const rest = allocate(values, total - positive.length);
+  return values.map((v, i) => (v > 0 ? 1 + (rest[i] ?? 0) : 0));
+}
+
 // 右对齐，取第一个放得下的选项（窄处自动退成只有百分比）
 function rightAlign(options, total) {
   for (const opt of options) {
@@ -403,17 +422,17 @@ function render(d) {
     colors = [SEGMENTS.convo];
   }
 
-  // 条按精确比例画（不用保底列）——否则小段各占 1 列，会从自由段偷列，
-  // 使色块边界比读数偏大（实测 25.5% 显示成 30%）。占比过小的段在条上消失
-  // 是可接受的：第三行明细里带数值，信息不丢。
-  const allocAll = allocate([...values, free], barWidth);
-  const usedCols = allocAll.slice(0, values.length).reduce((a, b) => a + b, 0);
+  // 「已用 / 自由」边界由 used 精确决定，保证色块与读数严格一致。
+  // 已用区内部再分列：每段保底 1 列，剩余按比例——否则占比 <1% 的段
+  // （技能、记忆常见如此）会被取整吃成 0 列，在条上整段消失。
+  const usedCols = Math.max(0, Math.min(barWidth, Math.round((used / size) * barWidth)));
+  const allocUsed = allocateWithFloor(values, usedCols);
+  const freeWidth = barWidth - usedCols;
   const usedCells = useColor
-    ? values.map((_, i) => (allocAll[i] > 0 ? bg(colors[i], ' '.repeat(allocAll[i])) : '')).join('')
+    ? values.map((_, i) => (allocUsed[i] > 0 ? bg(colors[i], ' '.repeat(allocUsed[i])) : '')).join('')
     : '█'.repeat(usedCols);
 
   const pctText = pct.toFixed(1) + '%';
-  const freeWidth = allocAll[values.length] ?? 0;
   const readoutColor = pct >= DANGER_AT ? DANGER_TEXT : pct >= WARN_AT ? WARN_TEXT : FREE_TEXT;
   const freeCell =
     freeWidth > 0
@@ -473,7 +492,7 @@ function render(d) {
 
 // 手动在终端直接运行时（stdin 是 TTY）用示例数据预览，避免阻塞等输入
 const PREVIEW =
-  '{"model":{"display_name":"Sonnet 5"},"cwd":"/home/me/project",' +
+  '{"model":{"display_name":"deepseek-v4.1-flash"},"cwd":"/home/me/project",' +
   '"workspace":{"current_dir":"/home/me/project"},' +
   '"context_window":{"used_percentage":31.3,"context_window_size":262000,' +
   '"total_input_tokens":82000,"current_usage":{"input_tokens":300,' +

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="783" height="86" viewBox="0 0 783 86" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="13">
+  <style>
+    /* GitHub 按主题切换：浅色用近白底，深色用近黑底 */
+    .bg { fill: #ffffff; }
+    .fg { fill: #1f2328; }
+    .fg2 { fill: #59636e; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #2e3440; }
+      .fg { fill: #d8dee9; }
+      .fg2 { fill: #a8b2c4; }
+    }
+  </style>
+  <rect width="100%" height="100%" class="bg"/>
+  <text x="16" y="55.5" class="fg" xml:space="preserve">Sonnet 5 · project                                                           ctx 26% (262k/1.0M)</text>
+  <text x="16.0" y="73.1" class="fg2" xml:space="preserve">系统 9.1k ·   工具 78k ·   MCP 92k ·   技能 2.1k ·   记忆 620 ·   对话 81k ·   自由 738k</text>
+</svg>

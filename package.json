@@ -16,7 +16,8 @@
     "install-statusline": "node install.mjs",
     "uninstall-statusline": "node install.mjs --uninstall",
     "status": "node install.mjs --status",
-    "preview": "node context-bar.mjs"
+    "preview": "node context-bar.mjs",
+    "make-preview-image": "node docs/make-preview.cjs ./context-bar.mjs"
   },
   "keywords": [
     "claude-code",

@@ -2,19 +2,23 @@
 
 给 Claude Code 的 statusline 加一条上下文用量条 —— 满宽色带 + 按类别拆分的用量明细。
 
-```
-████████████████████████████████                                                             255k/1.0M 25.5%
-Sonnet 5 · project                                                                       ctx 26% (255k/1.0M)
-  系统 9.1k ·   工具 78k ·   MCP 92k ·   技能 2.1k ·   记忆 620 ·   对话 74k ·   自由 745k
-```
-
-（以上是真实输出。已用各段之和 ≈ 255k，加上自由段 745k 正好 1.0M。）
+![预览](docs/preview.svg)
 
 - **三行输出**：色带（各段按 token 占比分列）、模型与 ctx、分段明细
 - **数据来自 Claude Code 本身**：`context_window` 是官方字段，不是估算
 - **固定开销精确读取**：从 transcript 的 `prompt_snapshot` 里读系统提示词和工具定义原文
 - **零依赖**：只用 Node 内置模块
 - **卸载可逐字节还原**：用字符串增删而非 JSON 重序列化，不打乱你的键顺序和缩进
+
+色带的分段（由深到浅）：**系统提示词 → 内置工具 → MCP 工具 → 技能 → 记忆 → 对话**，最后是自由段，右侧压着用量读数。第三行的彩色小方块与色带一一对应。
+
+纯文本形式是这样（终端里色带是彩色的）：
+
+```
+████████████████████████████████                                                             255k/1.0M 25.5%
+Sonnet 5 · project                                                                       ctx 26% (255k/1.0M)
+  系统 9.1k ·   工具 78k ·   MCP 92k ·   技能 2.1k ·   记忆 620 ·   对话 74k ·   自由 745k
+```
 
 ## 安装
 
@@ -115,6 +119,24 @@ Claude Code 传进来的只有总量（`context_window.total_input_tokens`），
 - **宽度不会瞬间跟随**：Claude Code 只在特定事件重跑 statusline，终端尺寸变化不在其中。用 `refreshInterval` 缓解。
 - **首次运行稍慢**：要读一次 transcript（最大 64MB）。之后按 `mtime + size` 缓存，只做一次 `stat`。缓存在系统临时目录，按 transcript 路径隔离。
 - **固定开销是估算**：段落划分精确，token 数是按字符数换算的。
+
+## 开发
+
+`docs/preview.svg` 由脚本的真实输出生成，不是手绘的，所以图和实现不会脱节：
+
+```bash
+node docs/make-preview.cjs ./context-bar.mjs <transcript.jsonl> docs/preview.svg
+```
+
+传一个真实的 transcript 路径即可（`~/.claude/projects/<项目>/<会话>.jsonl`）。改动渲染逻辑后重新生成一次，图就跟着更新。
+
+脚本本身没有依赖，也不需要构建。手动预览：
+
+```bash
+node context-bar.mjs
+```
+
+（stdin 是 TTY 时用内置示例数据渲染，不会阻塞等输入。）
 
 ## 许可
 
